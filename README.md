@@ -33,6 +33,7 @@ To run your own dataset, please follow the code in `preprocess_yahoo.py` to toke
 
 ## Training
 **1. Training on standard dataset**
+
 To run the test, use the command `python -u eval_[]_att.py` by filling `[]` with corresponding dataset name. Most the parameters are defined in the Option class part. For example, to run on Yahoo dataset:
 
 ```
