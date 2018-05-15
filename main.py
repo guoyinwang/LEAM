@@ -29,7 +29,7 @@ class Options(object):
         self.lr = 1e-3
         self.batch_size = 100
         self.max_epochs = 20
-        self.drop_rate = 1.0
+        self.dropout = 0.5
         self.part_data = False
         self.portion = 1.0 
         self.save_path = "./save/"
@@ -42,6 +42,7 @@ class Options(object):
         self.class_penalty = 1.0
         self.ngram = 55
         self.H_dis = 300
+
 
     def __iter__(self):
         for attr, value in self.__dict__.iteritems():
