@@ -236,7 +236,7 @@ def main():
                             x_val_batch, x_val_batch_mask = prepare_data_for_emb(val_sents, opt)
                             val_accuracy = sess.run(accuracy_, feed_dict={x_: x_val_batch, x_mask_: x_val_batch_mask,
                                 y_: val_labels, keep_prob: 1.0,
-                                opt.class_penalty_:0.0                                         })
+                                class_penalty_:0.0                                         })
 
                             val_correct += val_accuracy * len(val_index)
 
