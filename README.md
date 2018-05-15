@@ -10,8 +10,14 @@ This repository contains source code necessary to reproduce the results presente
 }
 ```
 
-![](/plots/schemes/scheme_a.png){ width=50% }
-![](/plots/schemes/scheme_b.png)
+Traditional Method           |  LEAM
+:-------------------------:|:-------------------------:
+![](/plots/schemes/scheme_a.png) |  ![](/plots/schemes/scheme_b.png)
+
+
+
+
+
 
 ## Contents
 There are four steps to use this codebase to reproduce the results in the paper.
