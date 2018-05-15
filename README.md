@@ -13,8 +13,7 @@ This repository contains source code necessary to reproduce the results presente
 Traditional Method           |  LEAM: Label Embedding Attentive Model
 :-------------------------:|:-------------------------:
 ![](/plots/schemes/scheme_a.png) |  ![](/plots/schemes/scheme_b.png)
-Directly aggregating word embedding V for sequence representation z | We leverage the “compatibility”
-G between embedded words V and labels C to derive the attention score β for improved z.
+Directly aggregating word embedding **V** for sequence representation **z** | We leverage the “compatibility” **G** between embedded words **V** and labels **C** to derive the attention score **β** for improved **z**.
 
 
 
