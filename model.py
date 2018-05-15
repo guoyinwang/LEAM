@@ -1,5 +1,4 @@
 import tensorflow as tf
-from utils import normalizing
 import numpy as np
 
 def embedding(features, opt, prefix='', is_reuse=None):
