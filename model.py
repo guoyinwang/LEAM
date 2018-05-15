@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+from tensorflow.contrib import layers
 
 def embedding(features, opt, prefix='', is_reuse=None):
     """Customized function to transform batched x into embeddings."""
