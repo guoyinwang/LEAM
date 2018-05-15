@@ -41,6 +41,7 @@ class Options(object):
         self.clip_grad = None
         self.class_penalty = 1.0
         self.ngram = 55
+        self.H_dis = 300
 
     def __iter__(self):
         for attr, value in self.__dict__.iteritems():
