@@ -37,7 +37,7 @@ To run your own dataset, please follow the code in `preprocess_yahoo.py` to toke
 To run the test, use the command `python -u main.py`. The default test is on Yahoo dataset. To run other default dataset, change the [`Option class`] attribute dataset to corresponding dataset name. Most the parameters are defined in the [`Option class`](./main.py) part. 
 
 ## Reproduce paper figure results
-Jupyter notebooks in fig folders are used to reproduce paper figure results.
+Jupyter notebooks in [`plots`] folders are used to reproduce paper figure results.
 
 Note that without modification, we have copyed our extracted results into the notebook, and script will output figures in the paper. If you've run your own training and wish to plot results, you'll have to organize your results in the same format instead.
 
