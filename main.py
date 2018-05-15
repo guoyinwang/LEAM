@@ -247,8 +247,7 @@ def main():
                             max_val_accuracy = val_accuracy
 
                             test_correct = 0.0
-                            test_emb = []
-                            test_y = []
+                            
                             kf_test = get_minibatches_idx(len(test), opt.batch_size, shuffle=True)
                             for _, test_index in kf_test:
                                 test_sents = [test[t] for t in test_index]
@@ -257,7 +256,7 @@ def main():
                                 test_labels = test_labels.reshape((len(test_labels), opt.num_class))
                                 x_test_batch, x_test_batch_mask = prepare_data_for_emb(test_sents, opt)
 
-                                test_accuracy = sess.run([accuracy_],feed_dict={x_: x_test_batch, x_mask_: x_test_batch_mask,y_: test_labels, keep_prob: 1.0, class_penalty_: 0.0})
+                                test_accuracy = sess.run(accuracy_,feed_dict={x_: x_test_batch, x_mask_: x_test_batch_mask,y_: test_labels, keep_prob: 1.0, class_penalty_: 0.0})
 
                                 test_correct += test_accuracy * len(test_index)                                
                             test_accuracy = test_correct / len(test)
