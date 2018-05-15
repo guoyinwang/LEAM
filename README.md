@@ -9,6 +9,10 @@ This repository contains source code necessary to reproduce the results presente
   year={2018}
 }
 ```
+
+![](/plots/schemes/scheme_a.pdf)
+![](/plots/schemes/scheme_b.pdf)
+
 ## Contents
 There are four steps to use this codebase to reproduce the results in the paper.
 
