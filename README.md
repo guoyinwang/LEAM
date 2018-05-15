@@ -13,7 +13,6 @@ This repository contains source code necessary to reproduce the results presente
 Traditional Method           |  LEAM: Label Embedding Attentive Model
 :-------------------------:|:-------------------------:
 ![](/plots/schemes/scheme_a.png) |  ![](/plots/schemes/scheme_b.png)
-:-------------------------:|:-------------------------:
 Directly aggregating word embedding V for sequence representation z 
 |
 Directly aggregating word embedding V for sequence representation z 
