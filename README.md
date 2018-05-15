@@ -1,5 +1,5 @@
 # LEAM
-This repository contains source code necessary to reproduce the results presented in the paper [Joint Embedding of Words and Labels for Text Classification](https://arxiv.org/) (ACL 2018):
+This repository contains source code necessary to reproduce the results presented in the paper [Joint Embedding of Words and Labels for Text Classification](https://arxiv.org/pdf/1805.04174.pdf) (ACL 2018):
 
 ```
 @inproceedings{wang_id_2018_ACL,
