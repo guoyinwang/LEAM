@@ -10,6 +10,8 @@ This repository contains source code necessary to reproduce the results presente
 }
 ```
 
+Comparison Illustration of proposed **LEAM** with traditinoal methods for text sequence representations
+
 Traditional Method           |  LEAM: Label Embedding Attentive Model
 :-------------------------:|:-------------------------:
 ![](/plots/schemes/scheme_a.png) |  ![](/plots/schemes/scheme_b.png)
