@@ -40,6 +40,7 @@ class Options(object):
         self.optimizer = 'Adam'
         self.clip_grad = None
         self.class_penalty = 1.0
+        self.ngram = 55
 
     def __iter__(self):
         for attr, value in self.__dict__.iteritems():
@@ -53,7 +54,7 @@ def emb_classifier(x, x_mask, y, dropout, opt, class_penalty):
     y_emb, W_class = embedding_class(y_pos, opt, 'class_emb') # b * e, c * e
     W_class_tran = tf.transpose(W_class, [1,0]) # e * c
     x_emb = tf.expand_dims(x_emb, 3)  # b * s * e * 1
-    H_enc, Att = att_emb_ngram_encoder_maxout(x_emb, x_mask, W_class, W_class_tran, opt)
+    H_enc = att_emb_ngram_encoder_maxout(x_emb, x_mask, W_class, W_class_tran, opt)
     H_enc = tf.squeeze(H_enc)
 
     logits = discriminator_2layer(H_enc, opt, dropout, prefix='classify_', num_outputs=opt.num_class, is_reuse=False)  # b * c
@@ -156,7 +157,7 @@ def main():
         keep_prob = tf.placeholder(tf.float32)
         y_ = tf.placeholder(tf.float32, shape=[opt.batch_size, opt.num_class])
         class_penalty_ = tf.placeholder(tf.float32, shape=())
-        accuracy_, loss_, train_op, W_norm_, global_step, Att_, H_enc_, W_class_ = emb_classifier(x_, x_mask_, y_, keep_prob, opt, class_penalty_)
+        accuracy_, loss_, train_op, W_norm_, global_step = emb_classifier(x_, x_mask_, y_, keep_prob, opt, class_penalty_)
     uidx = 0
     max_val_accuracy = 0.
     max_test_accuracy = 0.
