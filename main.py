@@ -123,6 +123,15 @@ def main():
             'Film',
             'Written Work',
             ]
+        elif opt.dataset == 'yelp_full':
+        loadpath = "./data/yelp_full.p"
+        embpath = "./data/yelp_full_glove.p"
+        self.num_class = 4
+        self.class_name = ['worst',
+                        'bad',
+                        'middle',
+                        'good',
+                        'best']
     
     x = cPickle.load(open(loadpath, "rb"))
     train, val, test = x[0], x[1], x[2]
