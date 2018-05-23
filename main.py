@@ -18,7 +18,7 @@ from utils import get_minibatches_idx, restore_from_save, tensors_key_in_file, p
 class Options(object):
     def __init__(self):
         self.GPUID = 0
-        self.dataset = 'yahoo'
+        self.dataset = 'dbpedia'
         self.fix_emb = True
         self.restore = False
         self.W_emb = None
@@ -52,13 +52,17 @@ def emb_classifier(x, x_mask, y, dropout, opt, class_penalty):
     # comment notation
     #  b: batch size, s: sequence length, e: embedding dim, c : num of class
     x_emb, W_norm = embedding(x, opt)  #  b * s * e
+    x_emb=tf.cast(x_emb,tf.float32)
+    W_norm=tf.cast(W_norm,tf.float32)
     y_pos = tf.argmax(y, -1)
     y_emb, W_class = embedding_class(y_pos, opt, 'class_emb') # b * e, c * e
+    y_emb=tf.cast(y_emb,tf.float32)
+    W_class=tf.cast(W_class,tf.float32)
     W_class_tran = tf.transpose(W_class, [1,0]) # e * c
     x_emb = tf.expand_dims(x_emb, 3)  # b * s * e * 1
     H_enc = att_emb_ngram_encoder_maxout(x_emb, x_mask, W_class, W_class_tran, opt)
     H_enc = tf.squeeze(H_enc)
-
+    # H_enc=tf.cast(H_enc,tf.float32)
     logits = discriminator_2layer(H_enc, opt, dropout, prefix='classify_', num_outputs=opt.num_class, is_reuse=False)  # b * c
     logits_class = discriminator_2layer(W_class, opt, dropout, prefix='classify_', num_outputs=opt.num_class, is_reuse=True)
     prob = tf.nn.softmax(logits)
@@ -97,10 +101,10 @@ def main():
             'Family Relationships' ,
             'Politics Government']
     elif opt.dataset == 'agnews':
-        loadpath = "./data/agnews.p"
-        embpath = "./data/agnews_glove.p"
-        self.num_class = 4
-        self.class_name = ['World',
+        loadpath = "./data/ag_news.p"
+        embpath = "./data/ag_news_glove.p"
+        opt.num_class = 4
+        opt.class_name = ['World',
                         'Sports',
                         'Business',
                         'Science']    
@@ -123,15 +127,6 @@ def main():
             'Film',
             'Written Work',
             ]
-        elif opt.dataset == 'yelp_full':
-        loadpath = "./data/yelp_full.p"
-        embpath = "./data/yelp_full_glove.p"
-        self.num_class = 4
-        self.class_name = ['worst',
-                        'bad',
-                        'middle',
-                        'good',
-                        'best']
     
     x = cPickle.load(open(loadpath, "rb"))
     train, val, test = x[0], x[1], x[2]
@@ -156,17 +151,17 @@ def main():
     print('Total words: %d' % opt.n_words)
 
     try:
-        opt.W_emb = cPickle.load(open(embpath, 'rb'))[0]
+        opt.W_emb = np.array(cPickle.load(open(embpath, 'rb')),dtype='float32')
         opt.W_class_emb =  load_class_embedding( wordtoix, opt)
     except IOError:
         print('No embedding file found.')
         opt.fix_emb = False
 
     with tf.device('/gpu:1'):
-        x_ = tf.placeholder(tf.int32, shape=[opt.batch_size, opt.maxlen])
-        x_mask_ = tf.placeholder(tf.float32, shape=[opt.batch_size, opt.maxlen])
-        keep_prob = tf.placeholder(tf.float32)
-        y_ = tf.placeholder(tf.float32, shape=[opt.batch_size, opt.num_class])
+        x_ = tf.placeholder(tf.int32, shape=[opt.batch_size, opt.maxlen],name='x_')
+        x_mask_ = tf.placeholder(tf.float32, shape=[opt.batch_size, opt.maxlen],name='x_mask_')
+        keep_prob = tf.placeholder(tf.float32,name='keep_prob')
+        y_ = tf.placeholder(tf.float32, shape=[opt.batch_size, opt.num_class],name='y_')
         class_penalty_ = tf.placeholder(tf.float32, shape=())
         accuracy_, loss_, train_op, W_norm_, global_step = emb_classifier(x_, x_mask_, y_, keep_prob, opt, class_penalty_)
     uidx = 0
