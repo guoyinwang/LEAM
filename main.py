@@ -18,7 +18,7 @@ from utils import get_minibatches_idx, restore_from_save, tensors_key_in_file, p
 class Options(object):
     def __init__(self):
         self.GPUID = 0
-        self.dataset = 'dbpedia'
+        self.dataset = 'yelp_full'
         self.fix_emb = True
         self.restore = False
         self.W_emb = None
@@ -130,8 +130,8 @@ def main():
     elif opt.dataset == 'yelp_full':
         loadpath = "./data/yelp_full.p"
         embpath = "./data/yelp_full_glove.p"
-        self.num_class = 4
-        self.class_name = ['worst',
+        opt.num_class = 5
+        opt.class_name = ['worst',
                         'bad',
                         'middle',
                         'good',
