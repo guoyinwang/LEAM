@@ -56,6 +56,55 @@ def att_emb_ngram_encoder_maxout(x_emb, x_mask, W_class, W_class_tran, opt):
     H_enc = tf.reduce_sum(x_att, axis=1)  
     return H_enc
 
+def att_emb_ngram_encoder_cnn(x_emb, x_mask, W_class, W_class_tran, opt):
+    x_mask = tf.expand_dims(x_mask, axis=-1) # b * s * 1
+    x_emb_0 = tf.squeeze(x_emb,) # b * s * e
+    x_emb_1 = tf.multiply(x_emb_0, x_mask) # b * s * e
+
+    H = tf.contrib.layers.conv2d(x_emb_0, num_outputs=opt.embed_size,kernel_size=[10], padding='SAME',activation_fn=tf.nn.relu) #b * s *  c
+
+
+    G = tf.contrib.keras.backend.dot(H, W_class_tran) # b * s * c
+    Att_v_max = partial_softmax(G, x_mask, 1, 'Att_v_max') # b * s * c
+
+    x_att = tf.contrib.keras.backend.batch_dot(tf.transpose(H,[0,2,1]), Att_v_max)
+    H_enc = tf.squeeze(x_att)
+    return H_enc
+
+
+def aver_emb_encoder(x_emb, x_mask):
+    """ compute the average over all word embeddings """
+    x_mask = tf.expand_dims(x_mask, axis=-1)
+    # x_mask = tf.expand_dims(x_mask, axis=-1)  # batch L 1 1
+
+    x_sum = tf.multiply(x_emb, x_mask)  # batch L emb 
+    H_enc_0 = tf.reduce_sum(x_sum, axis=1, keep_dims=True)  # batch 1 emb 
+    H_enc = tf.squeeze(H_enc_0, [1,])  # batch emb
+    x_mask_sum = tf.reduce_sum(x_mask, axis=1, keep_dims=True)  # batch 1 1 
+    x_mask_sum = tf.squeeze(x_mask_sum, [2,])  # batch 1
+
+    #pdb.set_trace()
+
+    H_enc = H_enc / x_mask_sum  # batch emb
+
+    return H_enc
+
+def gru_encoder(X_emb, opt, prefix = '', is_reuse=None, res=None):
+    with tf.variable_scope(prefix + 'gru_encoder', reuse=True):
+        cell_fw = tf.contrib.rnn.GRUCell(opt.n_hid)
+        cell_bw = tf.contrib.rnn.GRUCell(opt.n_hid)
+    with tf.variable_scope(prefix + 'gru_encoder', reuse=is_reuse):
+        weightInit = tf.random_uniform_initializer(-0.001, 0.001)
+        
+        packed_output, state = tf.nn.bidirectional_dynamic_rnn(cell_fw, cell_bw, X_emb , dtype = tf.float32)
+        h_fw = state[0]
+        h_bw = state[1]
+  
+        hidden = tf.concat((h_fw, h_bw), 1)
+        
+        hidden = tf.nn.l2_normalize(hidden, 1)
+    return hidden, res
+
 def discriminator_1layer(H, opt, dropout, prefix='', num_outputs=1, is_reuse=None):
     # last layer must be linear
     H = tf.squeeze(H)
